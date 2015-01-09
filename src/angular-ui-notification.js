@@ -107,7 +107,7 @@ angular.module('ui-notification').factory('Notification', function(
 			};
 
 			$timeout(function() {
-			//	templateElement.addClass('killed');
+				templateElement.addClass('killed');
 			}, args.delay);
 
 			angular.element(document.getElementsByTagName('body')).append(templateElement);
