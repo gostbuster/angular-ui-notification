@@ -90,6 +90,8 @@ angular.module('ui-notification').factory('Notification', function(
 
 			templateElement.bind('webkitTransitionEnd oTransitionEnd otransitionend transitionend msTransitionEnd click', function(e){
 
+				e = e.originalEvent || e;
+
 				var removeOnClick = !scope.closeBtn && e.type === 'click';
 
 
