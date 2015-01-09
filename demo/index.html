@@ -47,7 +47,7 @@
         </div>
 
         <script src="angular.min.js"></script>
-        <script src="angular-ui-notification.min.js"></script>  
+        <script src="../src/angular-ui-notification.js"></script>
         <script type="text/javascript">
             angular.module('notificationTest', ['ui-notification']);
 
@@ -78,7 +78,7 @@
                 // ==
 
                 $scope.primaryTitle = function() {
-                    Notification({message: 'Primary notification', title: 'Primary notification'});
+                    Notification({message: 'Primary notification', title: 'Primary notification',align:'center',closeBtn:true,noHoverEffect:true});
                 };
 
                 // ==

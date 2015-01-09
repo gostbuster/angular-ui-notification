@@ -1,0 +1,11 @@
+<div class="ui-notification">
+    <div class="ui-notification-title">
+        <button type="button" ng-show="closeBtn" ng-click="dismissNotification()" class="close">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 ng-show="title" ng-bind-html="title"></h3>
+    </div>
+
+    <div class="message" ng-bind-html="message"></div>
+</div>

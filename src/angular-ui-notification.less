@@ -4,13 +4,14 @@
 
 .ui-notification {
     position: fixed;
+    border:1px solid #EEE;
     right: 10px;
     top: -100px;
     z-index: 9999;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
     width: 300px;
-    color: @btn-primary-color;
-    background: @brand-primary;
+    color: @btn-default-color;
+    background: @btn-default-bg;
     .transition(all ease 0.5s);
     &.killed {
         opacity: 0;
@@ -44,19 +45,40 @@
     & > .message {
         margin: 10px 10px 10px 10px;
     }
+
+    &.primary > .ui-notification-title > h3,
+    &.warning > .ui-notification-title > h3,
+    &.error > .ui-notification-title > h3,
+    &.success > .ui-notification-title > h3,
+    &.info > .ui-notification-title > h3
+    {
+        border-bottom: 1px solid fadeout(@btn-primary-color, 70%);
+    }
+
+
+    &.primary{
+        color: @btn-primary-color;
+        background: @brand-primary;
+        border:0px;
+    }
+
     &.warning {
+        border:0px;
         color: @btn-warning-color;
         background: @brand-warning;
     }
     &.error {
+        border:0px;
         color: @btn-danger-color;
         background: @brand-danger;
     }
     &.success {
+        border:0px;
         color: @btn-success-color;
         background: @brand-success;
     }
     &.info {
+        border:0px;
         color: @btn-info-color;
         background: @brand-info;
     }

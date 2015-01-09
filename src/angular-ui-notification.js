@@ -11,6 +11,7 @@ angular.module('ui-notification').factory('Notification', function(
 	var horizontalSpacing = 10;
 	var type = '';
 	var delay = 5000;
+	var align='';
 
 	var messageElements = [];
 
@@ -27,8 +28,12 @@ angular.module('ui-notification').factory('Notification', function(
 		$http.get(args.template,{cache: $templateCache}).success(function(template) {
 
 			var scope = $rootScope.$new();
+
 			scope.message = $sce.trustAsHtml(args.message);
 			scope.title = $sce.trustAsHtml(args.title);
+			scope.closeBtn = !(angular.isUndefined(args.closeBtn))?args.closeBtn:false;
+
+
 			scope.t = args.type.substr(0,1);
 			scope.delay = args.delay;
 
@@ -36,6 +41,11 @@ angular.module('ui-notification').factory('Notification', function(
 				for (var key in args.scope){
 					scope[key] = args.scope[key];
 				}
+			}
+			if (typeof args.align === 'string' && args.align!==''){
+				align = args.align;
+			}else{
+				align = 'right';
 			}
 
 			var reposite = function() {
@@ -54,10 +64,17 @@ angular.module('ui-notification').factory('Notification', function(
 					}
 					var top = lastTop + (j === 0 ? 0 : verticalSpacing);
 					var right = startRight + (k * (horizontalSpacing + elWidth));
-					
+
+
 					element.css('top', top + 'px');
-					element.css('right', right + 'px');
-					
+					if(align =='center'){
+						element.css('right', 0 + 'px');
+						element.css('left', 0 + 'px');
+						element.css('margin', '0 auto');
+					}
+					else
+						element.css('right', right + 'px');
+
 					lastTop = top + elHeight;
 					j ++;
 				}
@@ -65,26 +82,48 @@ angular.module('ui-notification').factory('Notification', function(
 
 			var templateElement = $compile(template)(scope);
 			templateElement.addClass(args.type);
+
+			if(args.noHoverEffect){
+				templateElement.addClass('no-hover-effect');
+			}else
+				templateElement.addClass('hover-effect');
+
 			templateElement.bind('webkitTransitionEnd oTransitionEnd otransitionend transitionend msTransitionEnd click', function(e){
-				if (e.type === 'click' || (e.propertyName === 'opacity' && e.elapsedTime >= 1)){
-					templateElement.remove();
-					messageElements.splice(messageElements.indexOf(templateElement), 1);
-					reposite();
+
+				var removeOnClick = !scope.closeBtn && e.type === 'click';
+
+
+				if (removeOnClick || (e.propertyName === 'opacity' && e.elapsedTime >= 1)){
+
+					closeNotification();
 				}
 			});
+
+
+			var closeNotification = function(){
+				templateElement.remove();
+				messageElements.splice(messageElements.indexOf(templateElement), 1);
+				reposite();
+			};
+
 			$timeout(function() {
-				templateElement.addClass('killed');
+			//	templateElement.addClass('killed');
 			}, args.delay);
 
 			angular.element(document.getElementsByTagName('body')).append(templateElement);
-			messageElements.push(templateElement);				
+			messageElements.push(templateElement);
 
-			$timeout(reposite);						
+			$timeout(reposite);
+
+			scope.dismissNotification = function(){
+				closeNotification();
+			}
+
 
 		}).error(function(data){
 			throw new Error('Template ('+args.template+') could not be loaded. ' + data);
 		});
-		
+
 	};
 
 	notify.config = function(args){
